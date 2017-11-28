@@ -19,7 +19,11 @@ import javax.jws.WebParam;
 @WebService(serviceName = "MapWS", targetNamespace = "map")
 @Stateless()
 public class MapWS {
-
+    private static final double START_WIDTH_COORD = 52.7025000; // ToDo: zmienić na poprawne
+    private static final double START_LENGTH_COORD = 21.0827600; // ToDo: zmienić na poprawne
+    private static final double END_WIDTH_COORD = 52.8025000; // ToDo: zmienić na poprawne
+    private static final double END_LENGTH_COORD = 21.1827600; // ToDo: zmienić na poprawne
+    
     private final File map;
     private final Base64.Encoder encoder = Base64.getEncoder();
     
@@ -62,10 +66,10 @@ public class MapWS {
      * @return 
      * @throws java.lang.Exception 
      */
-    @WebMethod(operationName = "getMapSection")
-    public byte[] getMapSection(
+    @WebMethod(operationName = "getMapSectionByPixels")
+    public byte[] getMapSectionByPixels(
             @WebParam(name = "x1") int x1, 
-            @WebParam(name = "y1") int y1, 
+            @WebParam(name = "y1") int y1,
             @WebParam(name = "x2") int x2, 
             @WebParam(name = "y2") int y2
     ) throws Exception {
@@ -76,5 +80,26 @@ public class MapWS {
         ImageIO.write(croppedImage, "png", outputFile);
         
         return encoder.encode(loadFileAsBytesArray(outputFile));
+    }
+    
+    /**
+     * @param xWidthCoord1
+     * @param yWidthCoord1
+     * @param xLenghtCoord2
+     * @param yLengthCoord2
+     * @return 
+     * @throws java.lang.Exception 
+     */
+    @WebMethod(operationName = "getMapSectionByCoords")
+    public byte[] getMapSectionByCoords(
+            @WebParam(name = "xWidthCoord1") double xWidthCoord1,
+            @WebParam(name = "yWidthCoord1") double yWidthCoord1,
+            @WebParam(name = "xLenghtCoord2") double xLenghtCoord2,
+            @WebParam(name = "yLengthCoord2") double yLengthCoord2
+    ) throws Exception {
+        
+       // ToDo: dodać logikę
+       
+       return null;
     }
 }
