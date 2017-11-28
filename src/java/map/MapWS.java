@@ -35,6 +35,11 @@ public class MapWS {
         return encodedMap;
     }
     
+    /**
+     * @param fileName
+     * @return
+     * @throws Exception 
+     */
     public static byte[] loadFileAsBytesArray(String fileName) throws Exception {
         File file = new File(fileName);
         int length = (int) file.length();
