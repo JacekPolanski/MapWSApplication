@@ -1,16 +1,18 @@
 package map;
 
-import java.awt.image.BufferedImage;
-import java.util.Base64;
-import javax.jws.WebService;
 import javax.ejb.Stateless;
+import javax.imageio.ImageIO;
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
-import javax.imageio.ImageIO;
-import javax.jws.WebParam;
+import java.util.Base64;
 
 /**
  *
@@ -38,26 +40,25 @@ public class MapWS {
      * @throws java.lang.Exception 
      */
     @WebMethod(operationName = "getMap")
-    public byte[] getMap() throws Exception {
-        return encoder.encode(loadFileAsBytesArray(map));
+    public String getMap() throws Exception {        
+       return encoder(map);
     }
     
-    /**
-     * @param fileName
-     * @return
-     * @throws Exception 
-     */
-    private static byte[] loadFileAsBytesArray(File map) throws Exception {
-        int length = (int) map.length();
-        BufferedInputStream reader;
-        reader = new BufferedInputStream(new FileInputStream(map));
-        byte[] bytes = new byte[length];
-        reader.read(bytes, 0, length);
-        reader.close();
-        
-        return bytes;
-    }
-
+    public static String encoder(File file) {
+        String base64Image = "";
+	try (FileInputStream imageInFile = new FileInputStream(file)) {
+		// Reading a Image file from file system
+		byte imageData[] = new byte[(int) file.length()];
+		imageInFile.read(imageData);
+		base64Image = Base64.getEncoder().encodeToString(imageData);
+	} catch (FileNotFoundException e) {
+		System.out.println("Image not found" + e);
+	} catch (IOException ioe) {
+		System.out.println("Exception while reading the Image " + ioe);
+	}
+	return base64Image;
+}
+   
     /**
      * @param x1
      * @param y1
@@ -67,7 +68,7 @@ public class MapWS {
      * @throws java.lang.Exception 
      */
     @WebMethod(operationName = "getMapSectionByPixels")
-    public byte[] getMapSectionByPixels(
+    public String getMapSectionByPixels(
             @WebParam(name = "x1") int x1, 
             @WebParam(name = "y1") int y1,
             @WebParam(name = "x2") int x2, 
@@ -79,7 +80,7 @@ public class MapWS {
         File outputFile = new File("cropped.png");
         ImageIO.write(croppedImage, "png", outputFile);
         
-        return encoder.encode(loadFileAsBytesArray(outputFile));
+        return encoder(outputFile);
     }
     
     /**
