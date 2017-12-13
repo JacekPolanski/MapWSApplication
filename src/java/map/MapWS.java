@@ -27,7 +27,6 @@ public class MapWS {
     private static final double END_LENGTH_COORD = 21.1827600; // ToDo: zmienić na poprawne
     
     private final File map;
-    private final Base64.Encoder encoder = Base64.getEncoder(); //ta zmienna nie jest wykorzystywana
     
     public MapWS() throws Exception {
         URL sourceFile = this.getClass().getClassLoader().getResource("pultusk.png");
