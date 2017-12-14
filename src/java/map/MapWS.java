@@ -74,7 +74,8 @@ public class MapWS {
             @WebParam(name = "y2") int y2
     ) throws Exception {
         BufferedImage originalImage = ImageIO.read(map);
-        BufferedImage croppedImage = originalImage.getSubimage(x1, y1, x2 - x1, y2 - y1);
+        BufferedImage croppedImage = 
+                originalImage.getSubimage(x1, y1, x2 - x1, y2 - y1);
         
         File outputFile = new File("cropped.png");
         ImageIO.write(croppedImage, "png", outputFile);
@@ -83,23 +84,35 @@ public class MapWS {
     }
     
     /**
-     * @param xWidthCoord1
-     * @param yWidthCoord1
-     * @param xLenghtCoord2
-     * @param yLengthCoord2
+     * @param widthCoord1
+     * @param lengthCoord1
+     * @param widthCoord2
+     * @param lengthCoord2
      * @return 
      * @throws java.lang.Exception 
      */
     @WebMethod(operationName = "getMapSectionByCoords")
-    public byte[] getMapSectionByCoords(
-            @WebParam(name = "xWidthCoord1") double xWidthCoord1,
-            @WebParam(name = "yWidthCoord1") double yWidthCoord1,
-            @WebParam(name = "xLenghtCoord2") double xLenghtCoord2,
-            @WebParam(name = "yLengthCoord2") double yLengthCoord2
+    public String MapSectionByCoords(
+            @WebParam(name = "widthCoord1") double widthCoord1,
+            @WebParam(name = "lengthCoord1") double lengthCoord1,
+            @WebParam(name = "widthCoord2") double widthCoord2,
+            @WebParam(name = "lengthCoord2") double lengthCoord2
     ) throws Exception {
-        
-       // ToDo: dodać logikę
+       double a = (END_WIDTH_COORD - START_WIDTH_COORD) / 1000;
+       double b = (END_LENGTH_COORD - START_LENGTH_COORD) / 1000;
        
-       return null;
+       int x1 = (int) ((widthCoord1 - START_WIDTH_COORD) / a);
+       int y1 = (int) ((lengthCoord1 - START_LENGTH_COORD) / b);
+       int x2 = (int) ((widthCoord2 - START_WIDTH_COORD) / a);
+       int y2 = (int) ((lengthCoord2 - START_LENGTH_COORD) / b);
+       
+        BufferedImage originalImage = ImageIO.read(map);
+        BufferedImage croppedImage = 
+                originalImage.getSubimage(x1, y1, x2 - x1, y2 - y1);
+
+        File outputFile = new File("cropped.png");
+        ImageIO.write(croppedImage, "png", outputFile);
+
+        return encoder(outputFile);
     }
 }
