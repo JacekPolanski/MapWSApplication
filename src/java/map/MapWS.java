@@ -21,10 +21,10 @@ import java.util.Base64;
 @WebService(serviceName = "MapWS", targetNamespace = "map")
 @Stateless()
 public class MapWS {
-    private static final double START_WIDTH_COORD = 52.7025000; // ToDo: zmienić na poprawne
-    private static final double START_LENGTH_COORD = 21.0827600; // ToDo: zmienić na poprawne
-    private static final double END_WIDTH_COORD = 52.8025000; // ToDo: zmienić na poprawne
-    private static final double END_LENGTH_COORD = 21.1827600; // ToDo: zmienić na poprawne
+    private static final double START_WIDTH_COORD = 52.7025000; 
+    private static final double START_LENGTH_COORD = 21.0827600;
+    private static final double END_WIDTH_COORD = 52.8025000;
+    private static final double END_LENGTH_COORD = 21.1827600;
     
     private final File map;
     
@@ -40,7 +40,9 @@ public class MapWS {
      */
     @WebMethod(operationName = "getMap")
     public String getMap() throws Exception {        
-       return encoder(map);
+        System.out.println("Wysłano mapę");
+        
+        return encoder(map);
     }
     
     public static String encoder(File file) {
@@ -80,6 +82,8 @@ public class MapWS {
         File outputFile = new File("cropped.png");
         ImageIO.write(croppedImage, "png", outputFile);
         
+        System.out.println("Wysłano mapę");
+        
         return encoder(outputFile);
     }
     
@@ -113,6 +117,8 @@ public class MapWS {
         File outputFile = new File("cropped.png");
         ImageIO.write(croppedImage, "png", outputFile);
 
+        System.out.println("Wysłano mapę");
+        
         return encoder(outputFile);
     }
 }
